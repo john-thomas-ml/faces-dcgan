@@ -1,12 +1,17 @@
 # Celebrity Face Generation using DCGAN
 
-This project implements a Deep Convolutional Generative Adversarial Network (DCGAN) to generate realistic celebrity faces using the CelebA dataset. The model is trained on a subset of the dataset and saved for generating new images.
+This project implements a Deep Convolutional Generative Adversarial Network (DCGAN) to generate realistic celebrity faces using the CelebA dataset. The model is trained on a subset of the dataset and saved for generating new images. The project structure has been updated to include a dedicated script for image generation, along with a requirements file for easier dependency management.
 
 ## Project Structure
 
+- `generated/`: Directory containing the generated face images (e.g., `face_000.png`, `face_001.png`, ..., `face_009.png`).
 - `img_align_celeba/`: Directory containing the CelebA dataset images (aligned and cropped version).
+- `scripts/`: Directory containing the script for generating images.
+  - `generate.py`: Python script to generate new celebrity faces using the trained model.
 - `faces_dcgan_model.h5`: Saved trained GAN model for generating celebrity faces.
 - `faces.ipynb`: Jupyter notebook containing the code for data preprocessing, model architecture, training, and image generation.
+- `README.md`: Project documentation file.
+- `requirements.txt`: File listing the required Python packages and their minimum versions.
 
 ## Dataset
 
@@ -70,22 +75,23 @@ This project implements a Deep Convolutional Generative Adversarial Network (DCG
 
 ## Results
 
-The trained model generates realistic celebrity faces, saved as `faces_dcgan_model.h5`. The `faces.ipynb` notebook includes visualizations of generated images and loss curves.
+The trained model generates realistic celebrity faces, saved as `faces_dcgan_model.h5`. The `generated/` folder contains the output images (e.g., `face_000.png` to `face_009.png`) produced by the `generate.py` script. The `faces.ipynb` notebook includes visualizations of generated images and loss curves.
 
 ## Requirements
 
-- Python 3.x
-- TensorFlow
-- Keras
-- NumPy
-- Pandas
-- Matplotlib
-- Pillow (PIL)
-- Jupyter Notebook
+Install the required Python packages using the provided `requirements.txt` file:
+```
+tensorflow>=2.9.0
+numpy>=1.19.5
+pandas>=1.3.0
+matplotlib>=3.4.0
+Pillow>=8.0.0
+notebook>=6.0.0
+```
 
-Install dependencies using:
+Install dependencies with:
 ```bash
-pip install tensorflow keras numpy pandas matplotlib pillow notebook
+pip install -r requirements.txt
 ```
 
 ## Setup and Running
@@ -100,24 +106,11 @@ pip install tensorflow keras numpy pandas matplotlib pillow notebook
    - Run cells sequentially to preprocess data, train the model, and generate images.
 
 3. **Generate Images with Saved Model**:
-   Use the following code to load the model and generate new faces:
-   ```python
-   from tensorflow.keras.models import load_model
-   import numpy as np
-   import matplotlib.pyplot as plt
-
-   gan = load_model('faces_dcgan_model.h5')
-   noise = np.random.uniform(-1, 1, size=[10, 100])
-   generated_images = gan.layers[0].predict(noise)
-
-   plt.figure(figsize=(10, 8))
-   for i in range(10):
-       plt.subplot(2, 5, i+1)
-       plt.imshow((generated_images[i] + 1) / 2)
-       plt.axis('off')
-   plt.tight_layout()
-   plt.show()
-   ```
+   - Use the `generate.py` script to generate new faces:
+     ```bash
+     python scripts/generate.py --model faces_dcgan_model.h5 --num 10 --out generated/
+     ```
+   - This script generates 10 faces by default and saves them as `face_000.png` to `face_009.png` in the `generated/` directory. Adjust the `--num` and `--out` arguments as needed.
 
 ## License
 
