@@ -10,7 +10,7 @@ This project implements a Deep Convolutional Generative Adversarial Network (DCG
 
 ## Dataset
 
-- **CelebA Dataset**: Uses the aligned and cropped version of the CelebA dataset. Only the first 5,000 images are used to reduce training time.
+- **CelebA Dataset**: Uses the aligned and cropped version of the CelebA dataset. Only the first 10,000 images are used to reduce training time.
 - **Preprocessing**:
   - Images are cropped to a 128x128 box (coordinates: (26, 51, 154, 179)) and resized to 64x64 pixels.
   - Pixel values are normalized to [-1, 1] using `(X_train / 127.5) - 1.0`.
@@ -43,7 +43,9 @@ This project implements a Deep Convolutional Generative Adversarial Network (DCG
   - LeakyReLU(alpha=0.2)
   - Conv2D(256, kernel_size=4, strides=2) → [4, 4, 256]
   - LeakyReLU(alpha=0.2)
-  - Flatten → Dense(1, sigmoid activation)
+  - Flatten()
+  - Dropout(0.5)
+  - Dense(1, sigmoid activation)
 - **Output**: Probability (0 to 1) that the input image is real.
 
 ### GAN
@@ -56,13 +58,13 @@ This project implements a Deep Convolutional Generative Adversarial Network (DCG
 - **Epochs**: 100
 - **Batch Size**: 128
 - **Optimizers**:
-  - Discriminator: Adam (learning_rate=0.00001, beta_1=0.5)
-  - GAN: Adam (learning_rate=0.0002, beta_1=0.5)
+  - Discriminator: Adam (learning_rate=0.0002, beta_1=0.5)
+  - Generator (via GAN): Adam (learning_rate=0.0002, beta_1=0.5)
 - **Loss**: Binary Crossentropy
 - **Process**:
   - Generate fake images from noise.
   - Train discriminator on real images (labeled 0.9) and fake images (labeled 0).
-  - Train generator via GAN with noise inputs and real labels (1).
+  - Train generator via GAN twice per batch, each time with a new noise batch and real labels (1).
 - **Monitoring**: Displays 10 generated images every 10 epochs and plots generator/discriminator losses.
 - **Note**: Training is computationally intensive. A GPU is recommended.
 
